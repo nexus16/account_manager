@@ -20,6 +20,6 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::get('/account/', 'AccountsController@index');
 	Route::get('/account/{id}', 'AccountsController@show');
 	Route::post('/account/', 'AccountsController@save');
-	Route::put('/account/{id}', 'AccountsController@update');
+	Route::post('/account/{id}', 'AccountsController@update');
 	Route::delete('/account/{id}', 'AccountsController@destroy');
 });

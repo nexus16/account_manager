@@ -34,7 +34,7 @@ return [
     */
 
     'ttl' => 120,
-    'exp' => 120, //set expert time (minute)
+    // 'exp' => 120, //set expert time (minute)
     /*
     |--------------------------------------------------------------------------
     | Refresh time to live

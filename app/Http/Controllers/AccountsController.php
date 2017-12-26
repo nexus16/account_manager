@@ -57,7 +57,11 @@ class AccountsController extends Controller
         	$status = 404;
         else {
         	if ($this->currentUser->id == $account->user_id) {
-	        	$account->update(['email'=>$request->get('email'), 'password'=>$request->get('password')]);
+                if ($request->get('email'))
+                    $data['email'] =  $request->get('email');
+                if ($request->get('password'))
+                    $data['password'] =  $request->get('password');
+	        	$account->update($data);
 	        	$status = 200;
 	        } else {
 	        	$status = 401;
