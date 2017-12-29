@@ -5,88 +5,48 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Account;
 use App\User;
-use JWTAuth;
+use Auth;
 use Input;
 
 class AccountsController extends Controller
 {
-	private $currentUser;
-	public function __construct(Request $request)
-	{
-		$this->currentUser = JWTAuth::toUser($request->token);
-	}
     public function index(Request $request)
     {
-        $accounts = $this->currentUser->account;
-        if ($accounts) {
-        	$status = 200;
-        } else {
-        	$status = 404;
-        }
-    	return response()->json([
-        	'status'=> $status,
-        	'data' => $accounts
-        ]);
+        $accounts = Auth::user()->account;
+    	return view('accounts.index', compact('accounts'));
     }
-    public function show(Request $request, $id)
+    public function edit($id)
     {
-        $account = $this->currentUser->account()->find($id);
-        if ($account) {
-        	$status = 200;
-        } else {
-        	$status = 404;
-        }
-        return response()->json([
-        	'status'=> $status,
-        	'data' => $account
-        ]);
+        $account = Account::find($id);
+        $returnHTML = view('accounts.edit', compact('account'))->render();
+        return response()->json(array('success' => true, 'view'=>$returnHTML));
     }
     public function save(Request $request)
     {
-    	$account = $this->currentUser->account()->create(['email'=>$request->get('email'), 'password'=>$request->get('password')]);
-    	return response()->json([
-        	'status'=> 201,
-        	'data' => $account
-        ]);
+    	$account = Auth::user()->account()->create(['email'=>$request->get('email'), 'password'=>$request->get('password')]);
+        $returnHTML = view('accounts.item', compact('account'))->render();
+    	return response()->json(array('success' => true, 'view'=>$returnHTML));
     }
 
     public function update(Request $request, $id)
     {
     	$account = Account::find($id);
-    	if (!$account)
-        	$status = 404;
-        else {
-        	if ($this->currentUser->id == $account->user_id) {
-                if ($request->get('email'))
-                    $data['email'] =  $request->get('email');
-                if ($request->get('password'))
-                    $data['password'] =  $request->get('password');
-	        	$account->update($data);
-	        	$status = 200;
-	        } else {
-	        	$status = 401;
-	        }
+        if (Auth::id() == $account->user_id) {
+            if ($request->get('email'))
+                $data['email'] =  $request->get('email');
+            if ($request->get('password'))
+                $data['password'] =  $request->get('password');
+            $data= $account->update($data);
         }
-        return response()->json([
-        	'status'=> $status,
-        	'data' => $account
-        ]);
+        return $account;
     }
     public function destroy(Request $request, $id)
     {
     	$account = Account::find($id);
-    	if (!$account)
-        	$status = 404;
-        else {
-        	if ($this->currentUser->id == $account->user_id) {
-	        	$account->delete();
-	        	$status = 200;
-	        } else {
-	        	$status = 401;
-	        }
+    	if (Auth::id() == $account->user_id) {
+	        $account->delete();
         }
-        return response()->json([
-        	'status'=> $status
-        ]);
+        $respon['status'] = 'success';
+        return $respon;
     }
 }

@@ -11,21 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('user-info', 'UserController@getUserInfo');
+	Route::get('/account/', 'AccountsController@index')->name('accounts.index');
+	Route::get('/account/{id}', 'AccountsController@show');
+	Route::get('/account/{id}/edit', 'AccountsController@edit')->name('accounts.edit');
+	Route::post('/account/', 'AccountsController@save')->name('accounts.save');;
+	Route::post('/account/{id}', 'AccountsController@update')->name('accounts.update');
+	Route::delete('/account/{id}', 'AccountsController@destroy')->name('accounts.delete');
+	Route::get('/', 'AccountsController@index')->name('home');
 });
 
-Route::get('/demo2', function () {
-    return view('welcome');
-});
-Route::post('auth/register', 'UserController@register');
-Route::post('auth/login', 'UserController@login');
-Route::group(['middleware' => 'jwt.auth'], function () {
-    Route::get('user-info', 'UserController@getUserInfo');
-	Route::get('/account/', 'AccountsController@index');
-	Route::get('/account/{id}', 'AccountsController@show');
-	Route::post('/account/', 'AccountsController@save');
-	Route::post('/account/{id}', 'AccountsController@update');
-	Route::delete('/account/{id}', 'AccountsController@destroy');
-});
-	Route::get('/demo/', 'DemoController@index');
+Auth::routes();
+

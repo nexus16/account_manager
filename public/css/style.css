@@ -1,0 +1,36 @@
+.account-index {
+	width: 600px;
+	margin: auto;
+}
+.card {
+	color: #468847;
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+    margin-bottom: 10px; 
+}
+.card p {
+	margin: 5px 0;
+	line-height: 14px;
+	font: 14px;
+}
+.card .email {
+	margin-left: 42px; 
+}
+.card .password {
+	margin-left: 14px;
+}
+.form-create-new {
+	margin-bottom: 10px; 
+}
+.glyphicon {
+	cursor: pointer;
+}
+.form-create-new {
+	display: none;
+}
+@media screen and (max-width: 768px) {
+	.account-index {
+		width: 90%;
+		margin: auto;
+	}
+}
