@@ -14,11 +14,11 @@ class AccountsController extends Controller
 	private $currentUser;
 	public function __construct(Request $request)
 	{
-		$this->currentUser = JWTAuth::toUser($request->token);
+        $this->middleware('jwt.auth');
 	}
     public function index(Request $request)
     {
-        $accounts = $this->currentUser->account;
+        $accounts = JWTAuth::toUser($request->token)->account;
         if ($accounts) {
         	$status = 200;
         } else {
@@ -31,7 +31,7 @@ class AccountsController extends Controller
     }
     public function show(Request $request, $id)
     {
-        $account = $this->currentUser->account()->find($id);
+        $account = JWTAuth::toUser($request->token)->account()->find($id);
         if ($account) {
         	$status = 200;
         } else {
@@ -44,7 +44,7 @@ class AccountsController extends Controller
     }
     public function save(Request $request)
     {
-    	$account = $this->currentUser->account()->create(['email'=>$request->get('email'), 'password'=>$request->get('password')]);
+    	$account = JWTAuth::toUser($request->token)->account()->create(['email'=>$request->get('email'), 'password'=>$request->get('password')]);
     	return response()->json([
         	'status'=> 201,
         	'data' => $account
@@ -57,7 +57,7 @@ class AccountsController extends Controller
     	if (!$account)
         	$status = 404;
         else {
-        	if ($this->currentUser->id == $account->user_id) {
+        	if (JWTAuth::toUser($request->token)->id == $account->user_id) {
                 if ($request->get('email'))
                     $data['email'] =  $request->get('email');
                 if ($request->get('password'))
@@ -79,7 +79,7 @@ class AccountsController extends Controller
     	if (!$account)
         	$status = 404;
         else {
-        	if ($this->currentUser->id == $account->user_id) {
+        	if (JWTAuth::toUser($request->token)->id == $account->user_id) {
 	        	$account->delete();
 	        	$status = 200;
 	        } else {
