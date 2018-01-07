@@ -18,8 +18,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/account/{id}/edit', 'AccountsController@edit')->name('accounts.edit');
 	Route::post('/account/', 'AccountsController@save')->name('accounts.save');;
 	Route::post('/account/{id}', 'AccountsController@update')->name('accounts.update');
-	Route::delete('/account/{id}', 'AccountsController@destroy')->name('accounts.delete');
+	Route::get('/account/{id}/delete', 'AccountsController@destroy')->name('accounts.delete');
 	Route::get('/', 'AccountsController@index')->name('home');
+	Route::get('change-pasword', 'UserController@showFormChangePassword')->name('getChangePasword');
+	Route::post('change-pasword', 'UserController@changePassword')->name('postChangePasword');
 });
 
 Auth::routes();

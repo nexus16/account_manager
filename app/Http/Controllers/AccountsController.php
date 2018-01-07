@@ -25,7 +25,7 @@ class AccountsController extends Controller
     {
     	$account = Auth::user()->account()->create(['email'=>$request->get('email'), 'password'=>$request->get('password')]);
         $returnHTML = view('accounts.item', compact('account'))->render();
-    	return response()->json(array('success' => true, 'view'=>$returnHTML));
+        return redirect()->route('accounts.index');
     }
 
     public function update(Request $request, $id)
@@ -38,7 +38,7 @@ class AccountsController extends Controller
                 $data['password'] =  $request->get('password');
             $data= $account->update($data);
         }
-        return $account;
+        return redirect()->route('accounts.index');
     }
     public function destroy(Request $request, $id)
     {
@@ -46,7 +46,6 @@ class AccountsController extends Controller
     	if (Auth::id() == $account->user_id) {
 	        $account->delete();
         }
-        $respon['status'] = 'success';
-        return $respon;
+        return redirect()->route('accounts.index');
     }
 }

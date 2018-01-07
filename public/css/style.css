@@ -34,3 +34,16 @@
 		margin: auto;
 	}
 }
+@media screen and (max-width: 500px) {
+	.sidebar-toggle {
+		top: -50px;
+    	position: absolute;
+	}
+	.navbar-static-top {
+		min-height: 0 !important;
+		height: 0;
+	}
+	.main-sidebar {
+		padding-top: 50px  !important;
+	}
+}
