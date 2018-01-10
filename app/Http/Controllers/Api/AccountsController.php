@@ -20,9 +20,9 @@ class AccountsController extends Controller
     {
         $accounts = JWTAuth::toUser($request->token)->account;
         if ($accounts) {
-        	$status = 200;
+        	$status = true;
         } else {
-        	$status = 404;
+        	$status = false;
         }
     	return response()->json([
         	'status'=> $status,
@@ -33,9 +33,9 @@ class AccountsController extends Controller
     {
         $account = JWTAuth::toUser($request->token)->account()->find($id);
         if ($account) {
-        	$status = 200;
+        	$status = true;
         } else {
-        	$status = 404;
+        	$status = false;
         }
         return response()->json([
         	'status'=> $status,
@@ -44,9 +44,21 @@ class AccountsController extends Controller
     }
     public function save(Request $request)
     {
+        if ($request->get('email') == '') {
+            return response()->json([
+                'status'=> false,
+                'data' => "email_required"
+            ]);
+        }
+        if ($request->get('password') == '') {
+            return response()->json([
+                'status'=> false,
+                'data' => "password_required"
+            ]);
+        }
     	$account = JWTAuth::toUser($request->token)->account()->create(['email'=>$request->get('email'), 'password'=>$request->get('password')]);
     	return response()->json([
-        	'status'=> 201,
+        	'status'=> true,
         	'data' => $account
         ]);
     }
@@ -55,7 +67,7 @@ class AccountsController extends Controller
     {
     	$account = Account::find($id);
     	if (!$account)
-        	$status = 404;
+        	$status = false;
         else {
         	if (JWTAuth::toUser($request->token)->id == $account->user_id) {
                 if ($request->get('email'))
@@ -63,9 +75,9 @@ class AccountsController extends Controller
                 if ($request->get('password'))
                     $data['password'] =  $request->get('password');
 	        	$account->update($data);
-	        	$status = 200;
+	        	$status = true;
 	        } else {
-	        	$status = 401;
+	        	$status = false;
 	        }
         }
         return response()->json([
@@ -77,13 +89,13 @@ class AccountsController extends Controller
     {
     	$account = Account::find($id);
     	if (!$account)
-        	$status = 404;
+        	$status = false;
         else {
         	if (JWTAuth::toUser($request->token)->id == $account->user_id) {
 	        	$account->delete();
-	        	$status = 200;
+	        	$status = true;
 	        } else {
-	        	$status = 401;
+	        	$status = false;
 	        }
         }
         return response()->json([

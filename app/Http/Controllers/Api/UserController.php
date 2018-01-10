@@ -24,7 +24,7 @@ class UserController extends Controller
         ]);
         
         return response()->json([
-            'status'=> 201,
+            'status'=> true,
             'data'=>$user
         ]);
     }
@@ -45,7 +45,7 @@ class UserController extends Controller
     public function getUserInfo(Request $request){
         $user = JWTAuth::toUser($request->token);
         return response()->json([
-        	'status'=>200,
+        	'status'=>true,
         	'data' => $user
         ]);
     }
