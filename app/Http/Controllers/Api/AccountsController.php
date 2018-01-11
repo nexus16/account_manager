@@ -57,46 +57,42 @@ class AccountsController extends Controller
             ]);
         }
     	$account = JWTAuth::toUser($request->token)->account()->create(['email'=>$request->get('email'), 'password'=>$request->get('password')]);
+        $accountInfo = JWTAuth::toUser($request->token)->account()->find($account->id);
     	return response()->json([
         	'status'=> true,
-        	'data' => $account
+        	'data' => $accountInfo
         ]);
     }
 
     public function update(Request $request, $id)
     {
-    	$account = Account::find($id);
-    	if (!$account)
+    	$account = JWTAuth::toUser($request->token)->account()->find($id);
+    	if (!$account) {
         	$status = false;
-        else {
-        	if (JWTAuth::toUser($request->token)->id == $account->user_id) {
-                if ($request->get('email'))
-                    $data['email'] =  $request->get('email');
-                if ($request->get('password'))
-                    $data['password'] =  $request->get('password');
-	        	$account->update($data);
-	        	$status = true;
-	        } else {
-	        	$status = false;
-	        }
+            return response()->json([
+                'status'=> $status,
+            ]);
+        } else {
+            if ($request->get('email'))
+                $data['email'] =  $request->get('email');
+            if ($request->get('password'))
+                $data['password'] =  $request->get('password');
+        	$account->update($data);
+	        return response()->json([
+                'status'=> true,
+                'data' => $account
+            ]);
         }
-        return response()->json([
-        	'status'=> $status,
-        	'data' => $account
-        ]);
+        
     }
     public function destroy(Request $request, $id)
     {
-    	$account = Account::find($id);
+    	$account = JWTAuth::toUser($request->token)->account()->find($id);
     	if (!$account)
         	$status = false;
         else {
-        	if (JWTAuth::toUser($request->token)->id == $account->user_id) {
-	        	$account->delete();
-	        	$status = true;
-	        } else {
-	        	$status = false;
-	        }
+        	$account->delete();
+        	$status = true;
         }
         return response()->json([
         	'status'=> $status

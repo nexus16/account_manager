@@ -29,6 +29,6 @@ class User extends Authenticatable
 
     public function account()
     {
-        return $this->hasMany('App\Account')->orderBy('id', 'desc');
+        return $this->hasMany('App\Account')->select('id as account_id', 'email', 'password', 'user_id')->orderBy('id', 'desc');
     }
 }
