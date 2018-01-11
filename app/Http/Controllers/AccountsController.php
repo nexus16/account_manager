@@ -17,7 +17,7 @@ class AccountsController extends Controller
     }
     public function edit($id)
     {
-        $account = Account::find($id);
+        $account = Auth::user()->account()->find($id);
         $returnHTML = view('accounts.edit', compact('account'))->render();
         return response()->json(array('success' => true, 'view'=>$returnHTML));
     }

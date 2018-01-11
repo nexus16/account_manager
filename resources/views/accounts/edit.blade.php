@@ -9,8 +9,8 @@
   <div class="form-group">
   	<button class="btn btn-danger cancel-update" type="button">Cancel</button>
   	<button class="btn btn-primary update" type="button"
-  		data-url="{{route('accounts.update', $account->id)}}"
-		data-id = "{{$account->id}}"
+  		data-url="{{route('accounts.update', $account->account_id)}}"
+		data-id = "{{$account->account_id}}"
   		">Update</button>
   </div>
 </form>

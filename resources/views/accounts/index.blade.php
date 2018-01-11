@@ -45,23 +45,23 @@
             <td>{{$account->email}}</td>
             <td>{{$account->password}}</td>
             <td align="right">
-                <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-account-{{$account->id}}">削除</a>
-                <div class="modal fade" id="delete-account-{{$account->id}}">
+                <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete-account-{{$account->account_id}}">削除</a>
+                <div class="modal fade" id="delete-account-{{$account->account_id}}">
 				  <div class="modal-dialog">
 				    <div class="modal-content">
 				      <!-- Modal body -->
 				      <div class="modal-body">
 				       	<h3><b>{{$account->email}}</b>アカウントを削除<br>してもよろしいでしょうか？</h3>
 				       	<div class="text-center">
-				       		<a class="btn btn-primary" type="submit" href="{{route('accounts.delete', $account->id)}}">OK</a>
+				       		<a class="btn btn-primary" type="submit" href="{{route('accounts.delete', $account->account_id)}}">OK</a>
 						  	<button class="btn btn-danger" type="button" data-dismiss="modal">キャンセル</button>
 				       	</div>
 				      </div>
 				    </div>
 				  </div>
 				</div>
-                <a class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit-account-{{$account->id}}">変更</a>
-				<div class="modal fade" id="edit-account-{{$account->id}}">
+                <a class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit-account-{{$account->account_id}}">変更</a>
+				<div class="modal fade" id="edit-account-{{$account->account_id}}">
 				  <div class="modal-dialog">
 				    <div class="modal-content">
 				      <!-- Modal Header -->
@@ -72,7 +72,7 @@
 
 				      <!-- Modal body -->
 				      <div class="modal-body">
-				        <form role="form" method="POST" action="{{route('accounts.update', $account->id)}}">
+				        <form role="form" method="POST" action="{{route('accounts.update', $account->account_id)}}">
 							{{csrf_field()}}
 							<div class="form-group">
 							    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="アカウントID" name="email" required value="{{$account->email}}">
