@@ -66,36 +66,48 @@ class AccountsController extends Controller
 
     public function update(Request $request, $id)
     {
-    	$account = JWTAuth::toUser($request->token)->account()->find($id);
+    	$account = Account::find($id);
     	if (!$account) {
-        	$status = false;
             return response()->json([
-                'status'=> $status,
+                'status'=> false,
             ]);
         } else {
-            if ($request->get('email'))
-                $data['email'] =  $request->get('email');
-            if ($request->get('password'))
-                $data['password'] =  $request->get('password');
-        	$account->update($data);
-	        return response()->json([
-                'status'=> true,
-                'data' => $account
-            ]);
+            if ($account->user_id == JWTAuth::toUser($request->token)->id) {
+                if ($request->get('email'))
+                    $account->email =  $request->get('email');
+                if ($request->get('password'))
+                    $account->password =  $request->get('password');
+                $account->save();
+                return response()->json([
+                    'status'=> true,
+                    'data' => $account
+                ]);    
+            } else {
+                return response()->json([
+                    'status'=> false,
+                ]);
+            }
         }
         
     }
     public function destroy(Request $request, $id)
     {
-    	$account = JWTAuth::toUser($request->token)->account()->find($id);
-    	if (!$account)
-        	$status = false;
-        else {
-        	$account->delete();
-        	$status = true;
+    	$account = Account::find($id);
+        if (!$account) {
+            return response()->json([
+                'status'=> false,
+            ]);
+        } else {
+            if ($account->user_id == JWTAuth::toUser($request->token)->id) {
+                $account->delete();
+                return response()->json([
+                    'status'=> true,
+                ]);    
+            } else {
+                return response()->json([
+                    'status'=> false,
+                ]);
+            }
         }
-        return response()->json([
-        	'status'=> $status
-        ]);
     }
 }
